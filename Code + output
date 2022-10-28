@@ -1,0 +1,319 @@
+Michael Zou Wu
+CISC 3115
+
+
+Question 1: 
+import java.text.DecimalFormat;
+import java.util.Scanner;
+public class payRollTest {
+
+   public static void main(String[] args) {
+        int[] employeeID = {5658845, 4520125, 7895122,
+               8477541, 8451277, 1302850,
+               7580489};
+        int hours;
+        
+        double payRate;
+       
+        double wages;
+        
+        Payroll payroll = new Payroll();
+       
+        Scanner qt = new Scanner(System.in);
+       
+       for (int i = 0; i < 7; i++) {
+           do {
+               System.out.println("Please enter the hours worked by employee ID " + employeeID[i]+":");
+               hours = Integer.parseInt(qt.nextLine());
+           }
+           while (hours < 0);
+          
+           payroll.setHours(i, hours);
+          
+           do {
+               System.out.println("Please enter the hourly pay rate for employee ID:" + employeeID[i]+":" );
+               payRate = Double.parseDouble(qt.nextLine());
+             
+               if(payRate<6.00)
+                   System.out.println("Please enter a value greater than 6, these employees are FULL time you know.");
+              
+           }while (payRate < 6.00);
+          
+           payroll.setPayRate(i, payRate);
+           int empleid = payroll.getEmployeeID(i);
+           wages = payroll.calculateGrossPay(empleid);
+           payroll.setWages(i, wages);
+       }
+
+       DecimalFormat df=new DecimalFormat("##,###.00");
+
+       System.out.println("PAYROLL DATA");
+       System.out.println("=============");
+       for (int i = 0; i < 7; i++) {
+           System.out.println("\t your Employee ID is: " + payroll.getEmployeeID(i));
+           System.out.println("\t your total Gross pay is: $" + df.format(payroll.getWages(i)));
+       }
+       System.exit(0);
+   }
+}
+
+Result:
+ ----jGRASP exec: java payRollTest
+Please enter the hours worked by employee ID 5658845:
+10
+Please enter the hourly pay rate for employee ID:5658845:
+15
+Please enter the hours worked by employee ID 4520125:
+10
+Please enter the hourly pay rate for employee ID:4520125:
+16
+Please enter the hours worked by employee ID 7895122:
+10
+Please enter the hourly pay rate for employee ID:7895122:
+17
+Please enter the hours worked by employee ID 8477541:
+10
+Please enter the hourly pay rate for employee ID:8477541:
+18
+Please enter the hours worked by employee ID 8451277:
+10
+Please enter the hourly pay rate for employee ID:8451277:
+19
+Please enter the hours worked by employee ID 1302850:
+10
+Please enter the hourly pay rate for employee ID:1302850:
+20
+Please enter the hours worked by employee ID 7580489:
+10
+Please enter the hourly pay rate for employee ID:7580489:
+21
+PAYROLL DATA
+=============
+	 your Employee ID is: 5658845
+	 your total Gross pay is: $150.00
+	 your Employee ID is: 4520125
+	 your total Gross pay is: $160.00
+	 your Employee ID is: 7895122
+	 your total Gross pay is: $170.00
+	 your Employee ID is: 8477541
+	 your total Gross pay is: $180.00
+	 your Employee ID is: 8451277
+	 your total Gross pay is: $190.00
+	 your Employee ID is: 1302850
+	 your total Gross pay is: $200.00
+	 your Employee ID is: 7580489
+	 your total Gross pay is: $210.00
+
+ ----jGRASP: operation complete.
+
+
+Question 2: 
+Part 1:
+
+
+public class DriverExam {
+	
+	 private String [] correctAnswers = { "B", "D", "A", "A", "C", "A", "B", "A", "C", "D",
+	                        "B", "C", "D", "A", "D", "C", "C", "B", "D", "A" };
+	 private String [] studentAnswers;
+    private int numberOfQuestions = correctAnswers.length;
+    
+    public int totalCorrect() {
+    int totalCorrectAnswers=0;
+    
+    for ( int index=0;index<numberOfQuestions;index++) {
+      if(correctAnswers[index].equalsIgnoreCase(studentAnswers[index])) {
+         totalCorrectAnswers = totalCorrectAnswers+1;
+         } 
+      }
+      return totalCorrectAnswers;
+    }
+    public int totalIncorrect() {
+      int incorrectAnswers=0;
+      for(int index=0;index<numberOfQuestions;index++) {
+         if(!(correctAnswers[index].equalsIgnoreCase(studentAnswers[index]))) {
+            incorrectAnswers=incorrectAnswers+1;
+         }
+      }
+         return incorrectAnswers;
+    }
+    public boolean passed () {
+      int passingScore = 15;
+      if(totalCorrect()>=passingScore) {
+      return true;
+    }
+      return false;
+    }
+    public int [] questionsMissed() { 
+      int []questionsMissedArray = new int [numberOfQuestions];
+      int questionsMissedArrayIndex= 0;
+   
+      for(int index=0;index<numberOfQuestions;index++) {
+      if(!(correctAnswers[index].equalsIgnoreCase(studentAnswers[index]))) {
+       questionsMissedArray[questionsMissedArrayIndex] = index + 1;
+         questionsMissedArrayIndex++;
+         }
+       }
+      return questionsMissedArray;
+    }
+    public DriverExam(String [] studentArrayGiven) {
+         studentAnswers = studentArrayGiven;
+          }
+    }
+	 
+
+
+
+
+
+
+
+
+Part 2:
+import java.util.Scanner;
+
+public class DriverExamTest{
+  
+  public static void fillStudentAnswersArray(String [] studentAnswers) {
+   Scanner keyboard = new Scanner(System.in);
+   for(int index = 0;index<studentAnswers.length;index++){
+      String userResponse;
+      
+      System.out.println("Please answer question"+(index + 1));
+      userResponse = keyboard.nextLine();
+      
+      while(!userResponse.equalsIgnoreCase("A")&& !userResponse.equalsIgnoreCase("B")&& 
+     !userResponse.equalsIgnoreCase("C")&& !userResponse.equalsIgnoreCase("D")){
+      System.out.println("Valid Answer for questions" + (index + 1));
+      userResponse = keyboard.nextLine();
+      }
+      studentAnswers[index] = userResponse;
+      }
+      
+  }
+  public static void showTestResults(DriverExam driverExamObject){
+  System.out.println("You got" +driverExamObject.totalCorrect() + "correct answers and" + 
+  driverExamObject.totalIncorrect() + "incorrect answers.");
+  System.out.println("You missed questions");
+  for (int index = 0;index<driverExamObject.questionsMissed().length;index++){
+  if(driverExamObject.questionsMissed()[index]!=0){
+  System.out.print(driverExamObject.questionsMissed()[index] + "");
+   
+   
+      }
+   }
+    if(driverExamObject.passed()){
+      System.out.println("You Passed!");
+   }
+      else {
+      System.out.println("You failed!");
+   }
+  }
+   public static void main(String [] args){
+  final int NUMBER_OF_QUESTIONS = 20;
+  
+  String [] studentAnswers = new String [NUMBER_OF_QUESTIONS];
+       
+       fillStudentAnswersArray(studentAnswers);
+       
+       DriverExam drivingTest = new DriverExam(studentAnswers);
+      
+       showTestResults(drivingTest);
+       }
+   }
+
+
+
+Result:
+ ----jGRASP exec: java DriverExamTest
+Please answer question1
+D
+Please answer question2
+D
+Please answer question3
+D
+Please answer question4
+D
+Please answer question5
+D
+Please answer question6
+D
+Please answer question7
+D
+Please answer question8
+D
+Please answer question9
+D
+Please answer question10
+D
+Please answer question11
+D
+Please answer question12
+D
+Please answer question13
+D
+Please answer question14
+D
+Please answer question15
+D
+Please answer question16
+D
+Please answer question17
+D
+Please answer question18
+D
+Please answer question19
+D
+Please answer question20
+D
+You got5correct answers and15incorrect answers.
+You missed questions
+1345678911121416171820You failed!
+
+ ----jGRASP: operation complete.
+
+ ----jGRASP exec: java DriverExamTest
+Please answer question1
+B
+Please answer question2
+D
+Please answer question3
+A
+Please answer question4
+A
+Please answer question5
+C
+Please answer question6
+A
+Please answer question7
+B
+Please answer question8
+A
+Please answer question9
+C
+Please answer question10
+D
+Please answer question11
+B
+Please answer question12
+C
+Please answer question13
+D
+Please answer question14
+A
+Please answer question15
+D
+Please answer question16
+C
+Please answer question17
+C
+Please answer question18
+B
+Please answer question19
+D
+Please answer question20
+A
+You got20correct answers and0incorrect answers.
+You missed questions
+You Passed!
+
